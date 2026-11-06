@@ -1,0 +1,21 @@
+# Environnements virtuels et caches locaux
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.git/
+.gitignore
+.vscode/
+
+# Fichiers de données d'entraînement/test volumineux non requis par les conteneurs
+*.csv
+*.ipynb
+image/
+*.bat
+README.md
+
+# Secrets locaux
+.env

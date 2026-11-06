@@ -1,0 +1,27 @@
+# Environnement virtuel Python
+.venv/
+venv/
+ENV/
+env/
+
+# Fichiers compilés et cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Variables d'environnement et secrets (NE JAMAIS COMMITER SUR GITHUB)
+.env
+.env.local
+.env.*.local
+.streamlit/secrets.toml
+
+# Conserver explicitement les modèles ML nécessaires au Backend Render
+!app/model/*.pkl
+
+# Fichiers système et IDE
+.DS_Store
+Thumbs.db
+*.log

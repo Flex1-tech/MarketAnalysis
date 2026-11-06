@@ -1,0 +1,58 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: agri-price-backend
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - PORT=8000
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - API_KEY=${API_KEY:-agri-benin-local-secret-key-2026}
+    ports:
+      - "8000:8000"
+    networks:
+      - agri-private-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: agri-price-frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - BACKEND_URL=http://backend:8000
+      - BACKEND_TIMEOUT=${BACKEND_TIMEOUT:-45}
+      - API_KEY=${API_KEY:-agri-benin-local-secret-key-2026}
+      - ADMIN_USER=${ADMIN_USER:-admin}
+      - ADMIN_PASSWORD_HASH=${ADMIN_PASSWORD_HASH:-289464b4bbae5af3640ffa9744b5a20cb3978ecefccb69f1fa54a5b2fb341aa1}
+    ports:
+      - "8501:8501"
+    networks:
+      - agri-private-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8501/_stcore/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  agri-private-net:
+    driver: bridge
+    name: agri-private-net
